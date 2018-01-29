@@ -1,0 +1,36 @@
+- name: Install MySQL
+  hosts: all
+  tasks:
+    - name: Install MySQL
+      action: $ansible_pkg_mgr pkg=mysql-server state=installed
+    - name: Add Python MySQL DB
+      action: $ansible_pkg_mgr pkg=python-mysqldb state=installed
+    - name: Install python
+      action: $ansible_pkg_mgr pkg=python3.6 state=installed
+    - name: Install nodejs
+      action: $ansible_pkg_mgr pkg=nodejs state=installed
+    - name: Install nodejs
+      action: $ansible_pkg_mgr pkg=nodejs state=installed
+
+      notify:
+        - restart mysql
+
+    - name: Add mysql-user
+      mysql_user: name=mysql_service
+                  password=12345
+                  priv=*.*:ALL
+                  state=present
+      notify:
+       - start mysql
+
+  handlers:
+    - name: start mysql
+      service: name=mysql
+               enabled=yes
+               state=started
+    - name: restart mysql
+      service: name=mysql
+               enabled=yes
+               state=restarted
+
+
