@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  #config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -64,15 +64,21 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-   add-apt-repository ppa:deadsnakes/ppa
-   apt-get update
-   apt-get remove python* 	
-   apt-get -y install python3.6
-   curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-   sudo apt-get -y install -y nodejs
-   sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-   sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-   sudo apt-get -y install mysql-server		
-
-  SHELL
+   #add-apt-repository ppa:deadsnakes/ppa
+   #apt-get update
+   #apt-get remove python* 	
+   #apt-get -y install python3.6
+   #curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+   #sudo apt-get -y install -y nodejs
+   #sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password LAPASSWORD'
+   #sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password LAPASSWORD'
+   #sudo apt-get -y install mysql-server		
+   #apt-get install software-properties-common
+   #apt-add-repository ppa:ansible/ansible
+   #apt-get update
+   #apt-get install -y ansible
+   SHELL
+   config.vm.provision "ansible" do |ansible|
+     ansible.playbook = "playbook.yml"
+   end	
 end
